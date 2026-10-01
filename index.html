@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7A2636">
+<title>Кабинет Ольги Цюрюмовой</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --ink: #4A1620;
+    --ink-soft: #6B5257;
+    --paper: #F6F3EE;
+    --surface: #FFFFFF;
+    --line: #E5DADC;
+    --accent: #7A2636;
+    --accent-soft: #F2E3E6;
+    --accent-dark: #5C1A26;
+    --on-accent: #FFFFFF;
+    --shadow: 0 1px 2px rgba(74,22,32,0.06), 0 8px 20px -12px rgba(74,22,32,0.18);
+    --tg-safe-bottom: 0px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #EBD8DB;
+      --ink-soft: #B5A8AA;
+      --paper: #160E10;
+      --surface: #211417;
+      --line: #3A2226;
+      --accent: #C97A87;
+      --accent-soft: #3A1620;
+      --accent-dark: #C97A87;
+      --on-accent: #2A0E14;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  [hidden] { display: none !important; }
+
+  .frame {
+    width: 100%;
+    max-width: 440px;
+    min-height: 100vh;
+    background: var(--paper);
+    padding: 20px 16px calc(176px + max(env(safe-area-inset-bottom, 0px), var(--tg-safe-bottom, 0px)));
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .proto-badge {
+    align-self: flex-start;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+
+  .palette-badge {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 10px 4px 6px;
+    background: var(--surface);
+  }
+  .palette-badge .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .avatar {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    border-radius: 16px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .profile h1 {
+    margin: 0;
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+  .profile .tagline {
+    margin: 3px 0 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 8px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .stat-value {
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    display: block;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    line-height: 1.25;
+  }
+
+  .section { display: flex; flex-direction: column; gap: 14px; }
+  .section-title {
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    margin: 0;
+  }
+  .section-note {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 3px;
+    gap: 3px;
+  }
+  .seg-btn {
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 9px 6px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .seg-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .dir-desc {
+    margin: -8px 0 0;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .services { display: flex; flex-direction: column; gap: 10px; }
+  .case-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 13px 14px;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .case-card.selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .case-body { flex: 1; min-width: 0; }
+  .case-eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+  }
+  .case-title {
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    margin: 2px 0 3px;
+  }
+  .case-desc {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: 0 0 6px;
+  }
+  .case-price {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .case-radio {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .case-card.selected .case-radio {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .case-radio svg { width: 12px; height: 12px; display: none; }
+  .case-card.selected .case-radio svg { display: block; }
+
+  /* Кейсы */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .result-tile {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+  }
+  .result-amount {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-dark);
+  }
+  .result-label {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  .story-card {
+    background: var(--surface);
+    border: 1.5px dashed var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .story-tag {
+    align-self: flex-start;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 2px 8px;
+  }
+  .story-card.story-confirmed {
+    border-style: solid;
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .story-card.story-confirmed .story-tag {
+    color: var(--accent-dark);
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .story-title {
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    margin: 0;
+  }
+  .story-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .story-flow .arrow { color: var(--ink-soft); font-weight: 400; }
+  .story-flow .after { color: var(--accent-dark); }
+  .story-field { font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; }
+  .story-field b { color: var(--ink); font-weight: 600; }
+
+  /* Отзывы */
+  .quote-card {
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .quote-text {
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    line-height: 1.4;
+  }
+  .quote-source {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+  }
+  .review-group { display: flex; flex-direction: column; gap: 8px; }
+  .review-group-title {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .review-placeholder {
+    background: var(--surface);
+    border: 1.5px dashed var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  /* Бонусы */
+  .tier-card {
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tier-card.tier-highlight { border-color: var(--accent); background: var(--accent-soft); }
+  .tier-name {
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    font-size: 14.5px;
+  }
+  .tier-cond {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--accent-dark);
+  }
+  .tier-perks {
+    margin: 4px 0 0;
+    padding-left: 18px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .disclaimer {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+  }
+
+  .bottom-stack {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+  }
+  .cta-bar {
+    display: flex;
+    justify-content: center;
+    padding: 12px 16px 8px;
+    background: linear-gradient(to top, var(--paper) 65%, transparent);
+  }
+  .cta-inner {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 10px 10px 10px 14px;
+    box-shadow: var(--shadow);
+  }
+  .cta-info { flex: 1; min-width: 0; }
+  .cta-label {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .cta-price {
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 1px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cta-btn {
+    flex: none;
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    background: var(--accent-dark);
+    color: var(--on-accent);
+    padding: 11px 16px;
+    border-radius: 11px;
+    transition: opacity 0.15s ease;
+    white-space: nowrap;
+  }
+  .cta-btn[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .tabnav {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    padding: 8px 8px calc(8px + max(env(safe-area-inset-bottom, 0px), var(--tg-safe-bottom, 0px)));
+    display: flex;
+    justify-content: space-around;
+  }
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-family: "Manrope", sans-serif;
+    font-weight: 600;
+    font-size: 10.5px;
+    padding: 4px 2px;
+    cursor: pointer;
+  }
+  .tab-btn svg { width: 20px; height: 20px; stroke: currentColor; }
+  .tab-btn.active { color: var(--accent-dark); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <span class="proto-badge">Прототип · Telegram Mini App</span>
+
+  <div class="palette-badge"><span class="dot"></span>Палитра «Бордо» — выбор Ольги</div>
+
+  <div class="profile">
+    <div class="avatar">ОЦ</div>
+    <div>
+      <h1>Ольга Цюрюмова</h1>
+      <p class="tagline">Юрист для селлеров WB/Ozon и онлайн-бизнеса — сделайте всё за меня</p>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><span class="stat-value">15+</span><span class="stat-label">лет практики</span></div>
+    <div class="stat"><span class="stat-value">90%</span><span class="stat-label">выигранных дел</span></div>
+    <div class="stat"><span class="stat-value">80%</span><span class="stat-label">возврат при проигрыше</span></div>
+  </div>
+
+  <!-- Услуги -->
+  <div class="section" id="tab-services">
+    <div>
+      <div class="segmented" role="tablist" id="segmented">
+        <button class="seg-btn active" data-dir="sellers" role="tab" aria-selected="true">Селлеры WB / Ozon</button>
+        <button class="seg-btn" data-dir="business" role="tab" aria-selected="false">Онлайн-бизнес</button>
+      </div>
+      <p class="dir-desc" id="dirDesc"></p>
+    </div>
+    <div class="services" id="servicesList" role="radiogroup" aria-label="Выбор услуги"></div>
+    <p class="disclaimer">Цены — по прайс-листу Ольги (сентябрь 2026). Ретейнер за онлайн-школу и видеоконсультации в этот прайс пока не входят — они остаются отдельным треком из Этапа 2. В реальном Telegram-приложении сообщение уходит прямо в чат.</p>
+  </div>
+
+  <!-- Кейсы -->
+  <div class="section" id="tab-cases" hidden>
+    <h2 class="section-title">Подтверждённые результаты</h2>
+    <div class="results-grid">
+      <div class="result-tile"><div class="result-amount">172 000 ₽</div><div class="result-label">выиграно / взыскано</div></div>
+      <div class="result-tile"><div class="result-amount">300 000 ₽</div><div class="result-label">выиграно / взыскано</div></div>
+      <div class="result-tile"><div class="result-amount">400 000 ₽</div><div class="result-label">выиграно / взыскано</div></div>
+      <div class="result-tile"><div class="result-amount">3 747 121 ₽</div><div class="result-label">выиграно / взыскано</div></div>
+    </div>
+    <h2 class="section-title">Подтверждено благодарственным письмом</h2>
+    <div class="story-card story-confirmed">
+      <span class="story-tag">Ретейнер · 3 года</span>
+      <p class="story-title">Юридическое сопровождение школы по маркетплейсам</p>
+      <p class="story-field">Разработка договоров, обучающих юридических материалов и записанных видео-уроков для развития собственной программы обучения селлеров.</p>
+      <p class="story-field"><b>Клиент:</b> ООО «Точка Развития Групп» (Екатеринбург)</p>
+    </div>
+    <h2 class="section-title">Как будет выглядеть карточка дела</h2>
+    <div class="story-card">
+      <span class="story-tag">Пример формата</span>
+      <div class="story-flow">[заявлено] <span class="arrow">→</span> <span class="after">[взыскано]</span></div>
+      <p class="story-field"><b>Ситуация:</b> [краткое описание спора — заполняется по конкретному делу]</p>
+      <p class="story-field"><b>Как решили:</b> [досудебно / в суде — заполняется по конкретному делу]</p>
+    </div>
+    <p class="disclaimer">Четыре суммы выше уже подтверждены в аудите Этапа 1, ретейнер-кейс — благодарственным письмом клиента (сентябрь 2026). Карточки в формате «заявлено → взыскано» — следующий шаг: нужны даты и детали по каждому судебному делу от Ольги, чтобы наполнить их реальным содержанием.</p>
+  </div>
+
+  <!-- Отзывы -->
+  <div class="section" id="tab-reviews" hidden>
+    <h2 class="section-title">Отзывы</h2>
+    <p class="section-note">Канал отзывов Ольги уже существует (t.me/Tsyuryumova_otzyv) — здесь отзывы сгруппированы по тем же темам, что и услуги.</p>
+    <div class="review-group">
+      <span class="review-group-title">Институциональные благодарности</span>
+      <div class="quote-card">
+        <p class="quote-text">«Всегда можно положиться в самых сложных вопросах... находите оптимальное и юридически безупречное решение»</p>
+        <span class="quote-source">ООО «Точка Развития Групп» (Екатеринбург) — 3 года юридического сопровождения школы по маркетплейсам</span>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">«Блестящий специалист, на которого всегда можно положиться... особо ценим системный подход»</p>
+        <span class="quote-source">ООО «Лагерь ПРО», В. Малых (генеральный директор) — благодарность за сотрудничество</span>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">Доклад о юридической безопасности селлеров — «от неочевидных рисков до защиты от проверок»</p>
+        <span class="quote-source">ООО «Лагерь ПРО» — конференция «PRO Wildberries: вся система за 12+ часов», 14.04.2026</span>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">Лекция «Как нутрициологу вести профессиональную деятельность законно»</p>
+        <span class="quote-source">«Философия специй» (Светлана Гумницкая) — 24.09.2026</span>
+      </div>
+    </div>
+    <div class="review-group">
+      <span class="review-group-title">С прямых эфиров</span>
+      <div class="quote-card">
+        <p class="quote-text">«Селлеры дали обратную связь: всем очень-очень понравился эфир 🔥 Ваши разъяснения их успокоили, получили много рекомендаций и знаний! Просят ещё»</p>
+        <span class="quote-source">Карина Айрапетян (@karina_mpseller), наставник группы селлеров</span>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">«Я просто в восторге от Вашего профессионализма ❤️»</p>
+        <span class="quote-source">Участница эфира в школе «Лагерь ПРО»</span>
+      </div>
+      <div class="quote-card">
+        <p class="quote-text">«Настоящий мастер! Вы супер!»</p>
+        <span class="quote-source">Участник эфира в школе «Лагерь ПРО»</span>
+      </div>
+    </div>
+    <div class="review-group">
+      <span class="review-group-title">С созвонов</span>
+      <div class="quote-card">
+        <p class="quote-text">«Очень лояльная цена» — по сравнению с SKEYLO</p>
+        <span class="quote-source">Со слов потенциального клиента на созвоне, сентябрь 2026</span>
+      </div>
+    </div>
+    <div class="review-group">
+      <span class="review-group-title">Договоры и претензии</span>
+      <div class="review-placeholder">Отзыв появится здесь — добавьте текст из канала отзывов или попросите новый у клиента</div>
+    </div>
+    <div class="review-group">
+      <span class="review-group-title">Суды и взыскания</span>
+      <div class="review-placeholder">Отзыв появится здесь — добавьте текст из канала отзывов или попросите новый у клиента</div>
+    </div>
+    <p class="disclaimer">Реальные отзывы у Ольги есть в канале — их тоже нужно перенести и рассортировать. Институциональные благодарности и цитаты с эфиров выше — из присланных документов (сентябрь 2026), полный текст — в `regalii-otzyvy-olga.md`.</p>
+  </div>
+
+  <!-- Бонусы -->
+  <div class="section" id="tab-loyalty" hidden>
+    <h2 class="section-title">Программа лояльности</h2>
+    <p class="section-note">Черновик по пожеланию Ольги — «плюшки как у постоянного клиента». Условия ниже нужно обсудить и утвердить отдельно, это не готовое предложение.</p>
+    <div class="tier-card">
+      <span class="tier-name">Новый клиент</span>
+      <span class="tier-cond">Первое обращение</span>
+      <ul class="tier-perks">
+        <li>Бесплатные шаблоны документов из библиотеки</li>
+        <li>Консультация по стандартной цене</li>
+      </ul>
+    </div>
+    <div class="tier-card tier-highlight">
+      <span class="tier-name">Постоянный клиент</span>
+      <span class="tier-cond">От 2 оплаченных обращений</span>
+      <ul class="tier-perks">
+        <li>Цена не меняется, даже если прайс вырос</li>
+        <li>Скидка 10% на следующую разовую услугу</li>
+        <li>Приоритетный ответ в течение дня</li>
+      </ul>
+    </div>
+    <div class="tier-card">
+      <span class="tier-name">Клиент на сопровождении</span>
+      <span class="tier-cond">Ретейнер или регулярные обращения</span>
+      <ul class="tier-perks">
+        <li>Закреплённый личный юрист — сама Ольга</li>
+        <li>Бесплатный ежегодный аудит документов</li>
+        <li>Приоритет по срочным делам</li>
+      </ul>
+    </div>
+    <p class="disclaimer">Черновик для обсуждения с Ольгой — итоговые условия, проценты и пороги нужно согласовать отдельно, как и остальной прайс-лист.</p>
+  </div>
+</div>
+
+<div class="bottom-stack">
+  <div class="cta-bar">
+    <div class="cta-inner">
+      <div class="cta-info">
+        <span class="cta-label" id="ctaLabel">Выберите услугу</span>
+        <span class="cta-price" id="ctaPrice">чтобы узнать цену и написать Ольге</span>
+      </div>
+      <a class="cta-btn" id="ctaBtn" href="#" target="_blank" rel="noopener" aria-disabled="true">Написать →</a>
+    </div>
+  </div>
+  <nav class="tabnav" id="tabnav">
+    <button class="tab-btn active" data-tab="services" aria-current="page">
+      <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="3" stroke-width="1.6"/><path d="M6.5 8h7M6.5 11.5h4.5" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Услуги
+    </button>
+    <button class="tab-btn" data-tab="cases">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M10 3l6 2.2v4.3c0 3.7-2.5 6-6 7.5-3.5-1.5-6-3.8-6-7.5V5.2L10 3z" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.3 10l1.9 1.9L12.7 8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Кейсы
+    </button>
+    <button class="tab-btn" data-tab="reviews">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M3 5.5A2.5 2.5 0 015.5 3h9A2.5 2.5 0 0117 5.5v5A2.5 2.5 0 0114.5 13H9l-3.5 3.2V13h-1A2.5 2.5 0 013 10.5v-5z" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      Отзывы
+    </button>
+    <button class="tab-btn" data-tab="loyalty">
+      <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="9" rx="2" stroke-width="1.6"/><path d="M3 8h14M10 8v9" stroke-width="1.6"/><path d="M10 8c-1.6 0-3-1-3-2.6C7 4 8.2 3 9.3 3 10.4 3 10 6 10 8zM10 8c1.6 0 3-1 3-2.6C13 4 11.8 3 10.7 3 9.6 3 10 6 10 8z" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      Бонусы
+    </button>
+  </nav>
+</div>
+
+<script>
+(function () {
+  var TELEGRAM_HANDLE = "urist_for_business";
+
+  // --- Telegram Mini App integration (no-op outside Telegram: tg остаётся null) ---
+  var tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  function syncTelegramChrome() {
+    if (!tg) return;
+    try { tg.setHeaderColor(cssVar("--paper")); } catch (e) {}
+    try { tg.setBackgroundColor(cssVar("--paper")); } catch (e) {}
+    try {
+      var inset = tg.contentSafeAreaInset || tg.safeAreaInset;
+      if (inset && typeof inset.bottom === "number") {
+        document.documentElement.style.setProperty("--tg-safe-bottom", inset.bottom + "px");
+      }
+    } catch (e) {}
+  }
+
+  if (tg) {
+    try { tg.ready(); } catch (e) {}
+    try { tg.expand(); } catch (e) {}
+    try { tg.disableVerticalSwipes(); } catch (e) {}
+    try { tg.enableClosingConfirmation(); } catch (e) {}
+    syncTelegramChrome();
+    if (tg.onEvent) {
+      tg.onEvent("themeChanged", syncTelegramChrome);
+      tg.onEvent("viewportChanged", syncTelegramChrome);
+    }
+  }
+
+  function openChat(url) {
+    if (tg) {
+      try { tg.openTelegramLink(url); return; } catch (e) {}
+    }
+    window.open(url, "_blank", "noopener");
+  }
+
+  function haptic(type) {
+    if (tg && tg.HapticFeedback) {
+      try {
+        if (type === "select") tg.HapticFeedback.selectionChanged();
+        else tg.HapticFeedback.impactOccurred(type || "light");
+      } catch (e) {}
+    }
+  }
+  // --- конец блока интеграции ---
+
+  var data = {
+    sellers: {
+      desc: "Для тех, кто ведёт бизнес на маркетплейсах: договоры, претензии, суды с Wildberries и правообладателями.",
+      services: [
+        { id: "s1", eyebrow: "Договор", title: "Договор с подрядчиком/командой", desc: "Вариант для ИП и для самозанятого", price: "5 000–7 000 ₽/шт" },
+        { id: "s2", eyebrow: "Договор", title: "Сложный договор", desc: "Авторский заказ, партнёрское или лицензионное соглашение, договор с зарубежным поставщиком", price: "10 000 ₽/шт" },
+        { id: "s3", eyebrow: "Аудит", title: "Аудит договора", desc: "Проверка и корректировка договора от контрагента", price: "5 000–7 000 ₽/шт" },
+        { id: "s4", eyebrow: "Претензия", title: "Претензия к Wildberries", desc: "Анализ ситуации и подготовка досудебной претензии. Если оснований для иска нет — 5 000 ₽", price: "15 000 ₽" },
+        { id: "s5", eyebrow: "Претензия", title: "Ответ правообладателю", desc: "Проверка прав и подготовка ответа на претензию. Если требования обоснованы — 3 000 ₽", price: "5 000 ₽" },
+        { id: "s6", eyebrow: "Претензия", title: "Претензия к должнику", desc: "Анализ и подготовка досудебной претензии. Если оснований нет — 5 000 ₽", price: "15 000 ₽" },
+        { id: "s7", eyebrow: "Суд", title: "Дело против Wildberries", desc: "Иск, ведение дела, исполнительный лист, взыскание — оплата входит в иск и возвращается с ответчика", price: "30 000 ₽ (иск до 600 тыс./1,2 млн ₽) · 50 000 ₽ (свыше)" },
+        { id: "s8", eyebrow: "Суд", title: "Защита от правообладателя", desc: "Отзыв на иск и ведение дела до конца", price: "10 000 ₽ + 10% от отбитой суммы" }
+      ]
+    },
+    business: {
+      desc: "Для онлайн-школ, экспертов и сервисов: документы, аудит, консультации.",
+      services: [
+        { id: "o1", eyebrow: "Пакет", title: "Пакет документов для продаж онлайн", desc: "Оферта, политика конфиденциальности, согласия на обработку данных, рассылку и публикацию отзывов", price: "30 000 ₽ (из них оферта — 15 000 ₽)" },
+        { id: "o2", eyebrow: "Аудит", title: "Аудит договора", desc: "Проверка и корректировка для защиты ваших интересов", price: "5 000 ₽/договор" },
+        { id: "o3", eyebrow: "Документ", title: "Разработка договора", desc: "Любое направление, один вид договора", price: "7 000 ₽/вид" },
+        { id: "o4", eyebrow: "Аудит", title: "Аудит сайта и соцсетей", desc: "Сайты, подвалы, виджеты сбора данных, соцсети", price: "5 000 ₽" },
+        { id: "o5", eyebrow: "Консультация", title: "Созвон-консультация", desc: "40–60 минут, количество вопросов не ограничено", price: "5 000 ₽" },
+        { id: "o6", eyebrow: "Претензия", title: "Ответ на претензию", desc: "Изучение претензии ученика или подрядчика и подготовка мотивированного ответа", price: "7 000–10 000 ₽" }
+      ]
+    }
+  };
+
+  var state = { tab: "services", dir: "sellers", selected: null };
+
+  var segButtons = document.querySelectorAll(".seg-btn");
+  var dirDesc = document.getElementById("dirDesc");
+  var servicesList = document.getElementById("servicesList");
+  var ctaLabel = document.getElementById("ctaLabel");
+  var ctaPrice = document.getElementById("ctaPrice");
+  var ctaBtn = document.getElementById("ctaBtn");
+  var tabButtons = document.querySelectorAll(".tab-btn");
+  var sections = {
+    services: document.getElementById("tab-services"),
+    cases: document.getElementById("tab-cases"),
+    reviews: document.getElementById("tab-reviews"),
+    loyalty: document.getElementById("tab-loyalty")
+  };
+
+  function checkIcon() {
+    return '<svg viewBox="0 0 12 12" fill="none"><path d="M2.2 6.2L4.6 8.6L9.8 3.4" stroke="var(--on-accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  function renderServices() {
+    var dirData = data[state.dir];
+    dirDesc.textContent = dirData.desc;
+    servicesList.innerHTML = "";
+
+    dirData.services.forEach(function (svc) {
+      var card = document.createElement("button");
+      card.type = "button";
+      card.className = "case-card" + (state.selected && state.selected.id === svc.id ? " selected" : "");
+      card.setAttribute("role", "radio");
+      card.setAttribute("aria-checked", state.selected && state.selected.id === svc.id ? "true" : "false");
+      card.innerHTML =
+        '<div class="case-body">' +
+          '<div class="case-eyebrow">' + svc.eyebrow + '</div>' +
+          '<div class="case-title">' + svc.title + '</div>' +
+          '<div class="case-desc">' + svc.desc + '</div>' +
+          '<div class="case-price">' + svc.price + '</div>' +
+        '</div>' +
+        '<div class="case-radio">' + checkIcon() + '</div>';
+      card.addEventListener("click", function () {
+        haptic("select");
+        state.selected = svc;
+        renderServices();
+        updateCta();
+      });
+      servicesList.appendChild(card);
+    });
+  }
+
+  function updateCta() {
+    if (state.tab !== "services") {
+      ctaLabel.textContent = "Остались вопросы?";
+      ctaPrice.textContent = "Напишите Ольге напрямую";
+      ctaBtn.textContent = "Написать →";
+      ctaBtn.removeAttribute("aria-disabled");
+      ctaBtn.href = "https://t.me/" + TELEGRAM_HANDLE + "?text=" + encodeURIComponent("Здравствуйте, Ольга! У меня вопрос.");
+      return;
+    }
+    if (!state.selected) {
+      ctaLabel.textContent = "Выберите услугу";
+      ctaPrice.textContent = "чтобы узнать цену и написать Ольге";
+      ctaBtn.textContent = "Написать →";
+      ctaBtn.setAttribute("aria-disabled", "true");
+      ctaBtn.href = "#";
+      return;
+    }
+    ctaLabel.textContent = state.selected.title;
+    ctaPrice.textContent = state.selected.price;
+    ctaBtn.textContent = "Написать →";
+    ctaBtn.removeAttribute("aria-disabled");
+    var text = "Здравствуйте, Ольга! Меня интересует услуга: " + state.selected.title + " (" + state.selected.price + ").";
+    ctaBtn.href = "https://t.me/" + TELEGRAM_HANDLE + "?text=" + encodeURIComponent(text);
+  }
+
+  segButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      haptic("light");
+      segButtons.forEach(function (b) {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+      });
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
+      state.dir = btn.getAttribute("data-dir");
+      state.selected = null;
+      renderServices();
+      updateCta();
+    });
+  });
+
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      haptic("light");
+      var target = btn.getAttribute("data-tab");
+      state.tab = target;
+      tabButtons.forEach(function (b) {
+        b.classList.remove("active");
+        b.removeAttribute("aria-current");
+      });
+      btn.classList.add("active");
+      btn.setAttribute("aria-current", "page");
+      Object.keys(sections).forEach(function (key) {
+        sections[key].hidden = key !== target;
+      });
+      window.scrollTo({ top: 0, behavior: "instant" });
+      updateCta();
+    });
+  });
+
+  ctaBtn.addEventListener("click", function (e) {
+    if (ctaBtn.getAttribute("aria-disabled") === "true") { e.preventDefault(); return; }
+    e.preventDefault();
+    haptic("medium");
+    openChat(ctaBtn.href);
+  });
+
+  renderServices();
+  updateCta();
+})();
+</script>
+</body>
+</html>
